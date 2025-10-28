@@ -14,5 +14,5 @@ fn main() {
         path: PathBuf::from(path),
     };
 
-    println!("pattern: {:?}, path: {:?}", pattern, path)
+    println!("pattern: {:?}, path: {:?}", args.pattern, args.path)
 }
