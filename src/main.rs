@@ -1,5 +1,5 @@
 use clap::Parser;
-use std::{fs::read_to_string, path::PathBuf};
+use std::{error::Error, fs::read_to_string, path::PathBuf};
 
 /// Search for a pattern in a file
 #[derive(Parser, Debug)]
@@ -14,19 +14,24 @@ struct Cli {
     path: PathBuf,
 }
 
-fn main() {
+// TODO: for future cli apps and libs: have a look at thiserror and anyhow
+fn main() -> Result<(), Box<dyn Error>> {
     let args = Cli::parse();
-
-    // println!("pattern: {:?}, path: {:?}", args.pattern, args.path)
 
     // TODO: ensure the path points to a file and not a directory
     // TODO: use a more efficient mechanism. Reading the whole file into memory first is very
-    // inefficient for large files for our case
-    let content = read_to_string(&args.path).expect("could not read file");
+    let content = read_to_string(&args.path).map_err(|err| {
+        std::io::Error::new(
+            err.kind(),
+            format!("Error reading `{}`: {}", args.path.display(), err),
+        )
+    })?;
 
     for line in content.lines() {
         if line.contains(&args.pattern) {
             println!("{}", line);
         }
     }
+
+    Ok(())
 }
