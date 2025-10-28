@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 /// Search for a pattern in a file
 #[derive(Parser, Debug)]
-#[command(author, version, about, long_about = None)]
+#[command(version, about, long_about = None)]
 struct Cli {
     /// The pattern to search for
     #[arg(value_name = "PATTERN")]
