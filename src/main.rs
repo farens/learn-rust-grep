@@ -1,10 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use std::{
-    fs::read_to_string,
-    io::{Write, stdout},
-    path::PathBuf,
-};
+use std::{fs::read_to_string, io::stdout, path::PathBuf};
 
 /// Search for a pattern in a file
 #[derive(Parser, Debug)]
@@ -27,23 +23,7 @@ fn main() -> Result<()> {
     let content = read_to_string(&args.path)
         .with_context(|| format!("Failed to read file `{}`", args.path.display()))?;
 
-    find_matches(&args.pattern, &content, &mut stdout())?;
+    grrs::find_matches(&args.pattern, &content, &mut stdout())?;
 
     Ok(())
-}
-
-fn find_matches(pattern: &str, content: &str, mut writer: impl Write) -> Result<()> {
-    for line in content.lines() {
-        if line.contains(pattern) {
-            writeln!(writer, "{}", line).context("writing match failed")?;
-        }
-    }
-    Ok(())
-}
-
-#[test]
-fn find_a_match() {
-    let mut result = Vec::new();
-    find_matches("lorem", "lorem ipsum\ndolor sit amet", &mut result).unwrap();
-    assert_eq!(result, b"lorem ipsum\n");
 }
