@@ -1,4 +1,9 @@
-use std::env::args;
+use std::{env::args, path::PathBuf};
+
+struct Cli {
+    pattern: String,
+    path: PathBuf,
+}
 
 fn main() {
     let pattern = args().nth(1).expect("no pattern given");
