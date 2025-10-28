@@ -1,18 +1,21 @@
-use std::{env::args, path::PathBuf};
+use clap::Parser;
+use std::path::PathBuf;
 
+/// Search for a pattern in a file
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
 struct Cli {
+    /// The pattern to search for
+    #[arg(value_name = "PATTERN")]
     pattern: String,
+
+    /// The path to the file to search
+    #[arg(value_name = "PATH")]
     path: PathBuf,
 }
 
 fn main() {
-    let pattern = args().nth(1).expect("no pattern given");
-    let path = args().nth(2).expect("no path given");
-
-    let args = Cli {
-        pattern,
-        path: PathBuf::from(path),
-    };
+    let args = Cli::parse();
 
     println!("pattern: {:?}, path: {:?}", args.pattern, args.path)
 }
